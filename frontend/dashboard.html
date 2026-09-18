@@ -3,16 +3,95 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard</title>
+    <title>Dashboard — Overview</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
-  <body>
-    <h1>Welcome to the Dashboard</h1>
+  <body class="dashboard-viewport">
+    <!-- Floating Translucent Nav -->
+    <header class="apple-nav">
+      <div class="nav-container">
+        <a href="#" class="nav-brand">
+          <span class="nav-brand-dot"></span>
+          <span>Login System</span>
+        </a>
+        <div class="nav-actions">
+          <button class="btn-nav-logout" onclick="logout()">Sign Out</button>
+        </div>
+      </div>
+    </header>
 
-    <p>You have successfully logged in.</p>
+    <!-- Apple Hero Section -->
+    <main class="hero-section">
+      <div class="hero-pill">
+        <span class="status-dot"></span>
+        <span>Authenticated Session</span>
+      </div>
 
-    <button onclick="logout()">Logout</button>
+      <h1 class="hero-title" id="welcomeHeading">Welcome back.</h1>
+      <p class="hero-subtitle" id="welcomeSubtitle">
+        Your credentials are cryptographically verified with stateless JSON Web Tokens.
+      </p>
+
+      <!-- Bento Cards Grid -->
+      <div class="bento-grid">
+        <div class="bento-card">
+          <div class="bento-overline">User Profile</div>
+          <div class="bento-value" id="userName">Loading...</div>
+          <div class="bento-subtext" id="userEmail">Connecting to secure session...</div>
+        </div>
+
+        <div class="bento-card">
+          <div class="bento-overline">Cryptographic Security</div>
+          <div class="bento-value">HMAC SHA-256</div>
+          <div class="bento-subtext">Signed with high-entropy secret, expires in 60m</div>
+        </div>
+
+        <div class="bento-card">
+          <div class="bento-overline">Database Cluster</div>
+          <div class="bento-value">MongoDB Atlas</div>
+          <div class="bento-subtext">Bcrypt hashed passwords, protected network access</div>
+        </div>
+      </div>
+
+      <div class="hero-actions">
+        <button class="btn-secondary" onclick="loadProfile()">Verify Status</button>
+        <button class="btn-danger-pill" onclick="logout()">End Session</button>
+      </div>
+    </main>
 
     <script>
+      const API_URL = "https://login-system-2qxu.onrender.com";
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        window.location.href = "index.html";
+      } else {
+        loadProfile();
+      }
+
+      function loadProfile() {
+        fetch(`${API_URL}/api/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        .then(response => {
+          if (!response.ok) throw new Error("Unauthorized");
+          return response.json();
+        })
+        .then(data => {
+          if (data.user) {
+            document.getElementById("welcomeHeading").textContent = `Welcome back, ${data.user.name}.`;
+            document.getElementById("userName").textContent = data.user.name;
+            document.getElementById("userEmail").textContent = data.user.email;
+          }
+        })
+        .catch(() => {
+          localStorage.removeItem("token");
+          window.location.href = "index.html";
+        });
+      }
+
       function logout() {
         localStorage.removeItem("token");
         window.location.href = "index.html";

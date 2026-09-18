@@ -20,17 +20,24 @@ async function register() {
     });
 
     const data = await response.json();
+    const msgEl = document.getElementById("message");
+    msgEl.innerText = data.message || "Registration complete";
+    msgEl.className = response.ok ? "msg-success" : "msg-error";
 
-    document.getElementById("message").innerText =
-      data.message || "Registration complete";
+    if (response.ok && typeof switchTab === "function") {
+      setTimeout(() => switchTab("login"), 1200);
+    }
   } catch (error) {
-    document.getElementById("message").innerText = "Cannot connect to server";
+    const msgEl = document.getElementById("message");
+    msgEl.innerText = "Cannot connect to server. Please try again.";
+    msgEl.className = "msg-error";
   }
 }
 
 async function login() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
+  const msgEl = document.getElementById("message");
 
   try {
     const response = await fetch(`${API_URL}/api/login`, {
@@ -48,12 +55,17 @@ async function login() {
 
     if (data.token) {
       localStorage.setItem("token", data.token);
-      window.location.href = "dashboard.html";
+      msgEl.innerText = data.message || "Login successful.";
+      msgEl.className = "msg-success";
+      setTimeout(() => {
+        window.location.href = "dashboard.html";
+      }, 500);
     } else {
-      document.getElementById("message").innerText =
-        data.message || "Login failed";
+      msgEl.innerText = data.message || "Login failed";
+      msgEl.className = "msg-error";
     }
   } catch (error) {
-    document.getElementById("message").innerText = "Cannot connect to server";
+    msgEl.innerText = "Cannot connect to server. Please try again.";
+    msgEl.className = "msg-error";
   }
 }
