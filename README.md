@@ -1,10 +1,10 @@
-﻿<div align="center">
+<div align="center">
 
 # Login System
 
 **Minimalist, fluid authentication engineered with Apple design principles, stateless JSON Web Tokens, and MongoDB Atlas.**
 
-SF Pro typography • Glassmorphic materials • Fluid spring physics • Stateless JWT verification • MongoDB Atlas engine
+Inter typography • Glassmorphic materials • Fluid spring physics • Stateless JWT verification • MongoDB Atlas engine
 
 <br />
 
