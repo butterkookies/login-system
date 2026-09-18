@@ -1,0 +1,47 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2c2c2e"/>
+      <stop offset="100%" stop-color="#121214"/>
+    </linearGradient>
+
+    <!-- Accent / Shackle Gradient -->
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2997ff"/>
+      <stop offset="100%" stop-color="#0071e3"/>
+    </linearGradient>
+
+    <!-- Inner Shadow / Specular Glow -->
+    <linearGradient id="specularGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.02"/>
+    </linearGradient>
+
+    <!-- Drop Shadow for Glyphs -->
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <!-- Squircle Base (Apple 512px Superellipse) -->
+  <rect x="16" y="16" width="480" height="480" rx="110" fill="url(#bgGrad)"/>
+  <rect x="16" y="16" width="480" height="480" rx="110" fill="none" stroke="url(#specularGrad)" stroke-width="3"/>
+
+  <!-- Minimalist Security Padlock Emblem -->
+  <g filter="url(#softShadow)">
+    <!-- Shackle (Arch) -->
+    <path d="M 188 230 V 176 C 188 138 218 108 256 108 C 294 108 324 138 324 176 V 230"
+          fill="none"
+          stroke="url(#blueGrad)"
+          stroke-width="32"
+          stroke-linecap="round"/>
+
+    <!-- Lock Body -->
+    <rect x="156" y="220" width="200" height="174" rx="42" fill="#ffffff"/>
+
+    <!-- Keyhole -->
+    <circle cx="256" cy="292" r="16" fill="#1d1d1f"/>
+    <path d="M 248 296 L 244 332 C 244 336 248 340 252 340 H 260 C 264 340 268 336 268 332 L 264 296 Z" fill="#1d1d1f"/>
+  </g>
+</svg>
