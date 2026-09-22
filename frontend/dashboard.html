@@ -61,6 +61,42 @@
       </section>
     </main>
 
+    <!-- Product Spotlight Modal (Expanded Center Modal) -->
+    <div id="productSpotlightModal" class="spotlight-overlay" role="dialog" aria-modal="true" aria-labelledby="spotlightTitle">
+      <div class="spotlight-card">
+        <button class="btn-close-modal" onclick="closeProductSpotlight()" aria-label="Close details">✕</button>
+
+        <div class="spotlight-media">
+          <img id="spotlightImg" src="" alt="Coffee Drink" />
+          <span id="spotlightRoastBadge" class="coffee-roast-badge"></span>
+        </div>
+
+        <div class="spotlight-body">
+          <div>
+            <div id="spotlightFlavor" class="spotlight-flavor"></div>
+            <h2 id="spotlightTitle" class="spotlight-title"></h2>
+            <p id="spotlightDesc" class="spotlight-desc"></p>
+
+            <div class="spotlight-specs">
+              <div class="spotlight-spec-item">
+                <span class="spotlight-spec-label">Origin / Blend:</span>
+                <span id="spotlightOrigin" class="spotlight-spec-value"></span>
+              </div>
+              <div class="spotlight-spec-item">
+                <span class="spotlight-spec-label">Roast Profile:</span>
+                <span id="spotlightRoastSpec" class="spotlight-spec-value"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="spotlight-footer">
+            <div id="spotlightPriceWrap"></div>
+            <button class="btn-secondary" onclick="closeProductSpotlight()">Close Details</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Scripts -->
     <script src="coffee-data.js"></script>
     <script>

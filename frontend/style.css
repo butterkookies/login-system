@@ -267,12 +267,20 @@ body {
   flex-direction: column;
   box-shadow: var(--shadow-card);
   transition: all 0.3s var(--ease-smooth);
+  cursor: pointer;
+  outline: none;
+  user-select: none;
 }
 
-.coffee-card:hover {
-  transform: translateY(-4px);
+.coffee-card:hover,
+.coffee-card:focus-visible {
+  transform: translateY(-5px);
   box-shadow: var(--shadow-card-hover);
-  border-color: var(--border-medium);
+  border-color: var(--accent);
+}
+
+.coffee-card:focus-visible {
+  box-shadow: 0 0 0 3px rgba(178, 110, 59, 0.25), var(--shadow-card-hover);
 }
 
 .coffee-image-wrap {
@@ -291,7 +299,7 @@ body {
 }
 
 .coffee-card:hover .coffee-image {
-  transform: scale(1.04);
+  transform: scale(1.05);
 }
 
 .coffee-roast-badge {
@@ -316,13 +324,33 @@ body {
   flex-grow: 1;
 }
 
+.coffee-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
 .coffee-flavor-tag {
   font-size: 0.76rem;
   font-weight: 600;
   color: var(--accent);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  margin-bottom: 6px;
+}
+
+.coffee-card-hint {
+  font-size: 0.72rem;
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  opacity: 0.7;
+  transition: all 0.2s ease;
+}
+
+.coffee-card:hover .coffee-card-hint {
+  opacity: 1;
+  transform: translateX(2px);
 }
 
 .coffee-title {
@@ -587,6 +615,185 @@ body {
 
 .msg-error {
   color: #c93b2b;
+}
+
+/* --------------------------------------------------------------------------
+   Product Spotlight Modal (Expanded Center Modal)
+   -------------------------------------------------------------------------- */
+.spotlight-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(18, 12, 9, 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 1050;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-smooth);
+}
+
+.spotlight-overlay.active {
+  display: flex;
+  opacity: 1;
+}
+
+.spotlight-card {
+  background: var(--surface-card);
+  width: 100%;
+  max-width: 740px;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 32px 80px rgba(18, 12, 9, 0.35), 0 0 0 1px var(--border-subtle);
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  transform: translateY(16px) scale(0.96);
+  transition: all 0.35s var(--ease-smooth);
+}
+
+.spotlight-overlay.active .spotlight-card {
+  transform: translateY(0) scale(1);
+}
+
+.spotlight-media {
+  position: relative;
+  background: var(--bg-subtle);
+  min-height: 340px;
+  overflow: hidden;
+}
+
+.spotlight-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.spotlight-media .coffee-roast-badge {
+  bottom: 16px;
+  left: 16px;
+}
+
+.spotlight-body {
+  padding: 36px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.spotlight-flavor {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.spotlight-title {
+  font-family: var(--font-serif);
+  font-size: 1.85rem;
+  color: var(--text-primary);
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+
+.spotlight-desc {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.spotlight-specs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  background: var(--bg-subtle);
+  border-radius: var(--radius-md);
+  margin-bottom: 24px;
+}
+
+.spotlight-spec-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.84rem;
+}
+
+.spotlight-spec-label {
+  color: var(--text-muted);
+}
+
+.spotlight-spec-value {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.spotlight-footer {
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.spotlight-price-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.spotlight-price-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.spotlight-price-values {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.spotlight-price-main {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.spotlight-price-highlight {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--member-green);
+}
+
+@media (max-width: 680px) {
+  .spotlight-card {
+    grid-template-columns: 1fr;
+    max-height: 88vh;
+    overflow-y: auto;
+  }
+
+  .spotlight-media {
+    min-height: 220px;
+    max-height: 260px;
+  }
+
+  .spotlight-body {
+    padding: 24px 20px;
+  }
+
+  .spotlight-title {
+    font-size: 1.5rem;
+  }
 }
 
 /* --------------------------------------------------------------------------
