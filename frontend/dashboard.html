@@ -3,66 +3,66 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard — Overview</title>
+    <title>Member Dashboard — KŌHĪ Atelier</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
     <link rel="stylesheet" href="style.css" />
   </head>
-  <body class="dashboard-viewport">
-    <!-- Floating Translucent Nav -->
-    <header class="apple-nav">
-      <div class="nav-container">
-        <a href="#" class="nav-brand">
-          <span class="nav-brand-dot"></span>
-          <span>Login System</span>
+  <body>
+    <!-- Minimalist Navigation -->
+    <header class="cafe-nav">
+      <div class="nav-inner">
+        <a href="dashboard.html" class="nav-brand">
+          <span class="brand-icon">☕</span>
+          <span class="brand-name">KŌHĪ</span>
+          <span class="brand-tag">Member Club</span>
         </a>
         <div class="nav-actions">
-          <button class="btn-nav-logout" onclick="logout()">Sign Out</button>
+          <a href="index.html" class="btn-secondary">Public View</a>
+          <button class="btn-signout" onclick="logout()">Sign Out</button>
         </div>
       </div>
     </header>
 
-    <!-- Apple Hero Section -->
-    <main class="hero-section">
-      <div class="hero-pill">
-        <span class="status-dot"></span>
-        <span>Authenticated Session</span>
-      </div>
-
-      <h1 class="hero-title" id="welcomeHeading">Welcome back.</h1>
-      <p class="hero-subtitle" id="welcomeSubtitle">
-        Your credentials are cryptographically verified with stateless JSON Web Tokens.
-      </p>
-
-      <!-- Bento Cards Grid -->
-      <div class="bento-grid">
-        <div class="bento-card">
-          <div class="bento-overline">User Profile</div>
-          <div class="bento-value" id="userName">Loading...</div>
-          <div class="bento-subtext" id="userEmail">Connecting to secure session...</div>
+    <main>
+      <!-- Hero / Member Welcome Section -->
+      <section class="hero-wrapper">
+        <div class="hero-pill member-pill">
+          <span class="hero-pill-dot"></span>
+          <span>Active Membership • 15% Savings</span>
         </div>
 
-        <div class="bento-card">
-          <div class="bento-overline">Cryptographic Security</div>
-          <div class="bento-value">HMAC SHA-256</div>
-          <div class="bento-subtext">Signed with high-entropy secret, expires in 60m</div>
-        </div>
+        <h1 class="hero-title" id="welcomeHeading">Welcome back.</h1>
+        <p class="hero-subtitle">
+          Your exclusive club benefits are unlocked. Enjoy 15% off all single-origins, seasonal roasts, and signature lattes.
+        </p>
 
-        <div class="bento-card">
-          <div class="bento-overline">Database Cluster</div>
-          <div class="bento-value">MongoDB Atlas</div>
-          <div class="bento-subtext">Bcrypt hashed passwords, protected network access</div>
+        <!-- Member Profile Ribbon -->
+        <div class="member-banner">
+          <div class="member-info-left">
+            <div class="member-avatar" id="memberAvatar">M</div>
+            <div>
+              <div class="member-details-name" id="userName">Loading Member...</div>
+              <div class="member-details-email" id="userEmail">Connecting to session...</div>
+            </div>
+          </div>
+          <div class="member-info-right">
+            <span class="member-status-pill">
+              <span>●</span> 15% Member Discount Applied
+            </span>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div class="hero-actions">
-        <button class="btn-secondary" onclick="loadProfile()">Verify Status</button>
-        <button class="btn-danger-pill" onclick="logout()">End Session</button>
-      </div>
+      <!-- Coffee Menu Grid with Member Pricing -->
+      <section class="menu-container">
+        <div id="coffeeGridMember" class="coffee-grid"></div>
+      </section>
     </main>
 
+    <!-- Scripts -->
+    <script src="coffee-data.js"></script>
     <script>
       const API_URL = "https://login-system-2qxu.onrender.com";
       const token = localStorage.getItem("token");
@@ -71,6 +71,8 @@
         window.location.href = "index.html";
       } else {
         loadProfile();
+        // Render coffee grid with member pricing active (true)
+        renderCoffeeGrid("coffeeGridMember", true);
       }
 
       function loadProfile() {
@@ -85,9 +87,13 @@
         })
         .then(data => {
           if (data.user) {
-            document.getElementById("welcomeHeading").textContent = `Welcome back, ${data.user.name}.`;
-            document.getElementById("userName").textContent = data.user.name;
+            const name = data.user.name || "Coffee Lover";
+            document.getElementById("welcomeHeading").textContent = `Welcome back, ${name}.`;
+            document.getElementById("userName").textContent = name;
             document.getElementById("userEmail").textContent = data.user.email;
+            
+            const firstLetter = name.trim().charAt(0).toUpperCase() || "K";
+            document.getElementById("memberAvatar").textContent = firstLetter;
           }
         })
         .catch(() => {

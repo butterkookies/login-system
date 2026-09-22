@@ -41,11 +41,6 @@ app.post("/api/register", async (req, res) => {
         .json({ message: "Password must be at least 6 characters." });
     }
 
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(409).json({ message: "Email is already registered." });
-    }
-
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await User.create({
@@ -56,6 +51,9 @@ app.post("/api/register", async (req, res) => {
 
     res.status(201).json({ message: "Registration successful." });
   } catch (error) {
+    if (error.code === 11000) {
+      return res.status(409).json({ message: "Email is already registered." });
+    }
     res.status(500).json({ message: "Server error." });
   }
 });
@@ -64,7 +62,7 @@ app.post("/api/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).lean();
     if (!user) {
       return res.status(401).json({ message: "Invalid email or password." });
     }

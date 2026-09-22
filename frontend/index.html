@@ -3,64 +3,104 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login System — Sign In</title>
+    <title>KŌHĪ Atelier — Minimalist Coffee Menu</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
     <link rel="stylesheet" href="style.css" />
   </head>
-  <body class="auth-page">
-    <div class="auth-card">
-      <div class="brand-mark"></div>
-
-      <div class="auth-header">
-        <h2 id="formTitle">Welcome Back</h2>
-        <p id="formSubtitle">Enter your credentials to access your account</p>
+  <body>
+    <!-- Minimalist Navigation -->
+    <header class="cafe-nav">
+      <div class="nav-inner">
+        <a href="index.html" class="nav-brand">
+          <span class="brand-icon">☕</span>
+          <span class="brand-name">KŌHĪ</span>
+          <span class="brand-tag">Atelier</span>
+        </a>
+        <div class="nav-actions" id="navActions">
+          <button class="btn-secondary" onclick="openAuthModal('login')">Sign In</button>
+          <button class="btn-primary" onclick="openAuthModal('register')">Join Club</button>
+        </div>
       </div>
+    </header>
 
-      <div class="segmented-control">
-        <button type="button" class="segmented-btn active" id="tabLogin" onclick="switchTab('login')">Log In</button>
-        <button type="button" class="segmented-btn" id="tabRegister" onclick="switchTab('register')">Sign Up</button>
+    <!-- Hero Section -->
+    <main>
+      <section class="hero-wrapper">
+        <div class="hero-pill">
+          <span class="hero-pill-dot"></span>
+          <span>Artisan Micro-Roastery</span>
+        </div>
+        <h1 class="hero-title">Crafted with patience.<br>Roasted for depth.</h1>
+        <p class="hero-subtitle">
+          Explore our seasonal single-origin pour-overs, botanical lattes, and slow-steeped cold brews. 
+          Members receive 15% off every order.
+        </p>
+      </section>
+
+      <!-- Coffee Menu Grid -->
+      <section class="menu-container">
+        <div id="coffeeGrid" class="coffee-grid"></div>
+      </section>
+    </main>
+
+    <!-- Minimalist Auth Modal -->
+    <div id="authModal" class="modal-overlay" role="dialog" aria-modal="true">
+      <div class="modal-card">
+        <button class="btn-close-modal" onclick="closeAuthModal()" aria-label="Close modal">✕</button>
+
+        <div class="auth-header">
+          <h2 id="formTitle">Welcome Back</h2>
+          <p id="formSubtitle">Sign in to enjoy 15% member pricing on all roasts</p>
+        </div>
+
+        <div class="segmented-control">
+          <button type="button" class="segmented-btn active" id="tabLogin" onclick="switchTab('login')">Sign In</button>
+          <button type="button" class="segmented-btn" id="tabRegister" onclick="switchTab('register')">Join Club</button>
+        </div>
+
+        <form onsubmit="event.preventDefault();">
+          <div class="form-group" id="nameGroup" style="display: none;">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" placeholder="E.g., Maya Lin" autocomplete="name" />
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" placeholder="name@domain.com" autocomplete="email" required />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" required />
+          </div>
+
+          <button type="button" class="btn-auth-submit" id="loginBtn" onclick="login()">Sign In</button>
+          <button type="button" class="btn-auth-submit" id="registerBtn" onclick="register()" style="display: none;">Create Membership</button>
+        </form>
+
+        <p id="message"></p>
       </div>
-
-      <div class="form-group" id="nameGroup" style="display: none;">
-        <label for="name">Full Name</label>
-        <input type="text" id="name" placeholder="John Appleseed" autocomplete="name" />
-      </div>
-
-      <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" id="email" placeholder="name@example.com" autocomplete="email" />
-      </div>
-
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" />
-      </div>
-
-      <button type="button" class="btn-apple-primary" id="loginBtn" onclick="login()">Log In</button>
-      <button type="button" class="btn-apple-primary" id="registerBtn" onclick="register()" style="display: none;">Create Account</button>
-
-      <p id="message"></p>
     </div>
 
+    <!-- Scripts -->
+    <script src="coffee-data.js"></script>
+    <script src="app.js"></script>
     <script>
-      function switchTab(mode) {
-        const isLogin = mode === 'login';
-        document.getElementById('tabLogin').classList.toggle('active', isLogin);
-        document.getElementById('tabRegister').classList.toggle('active', !isLogin);
-        document.getElementById('nameGroup').style.display = isLogin ? 'none' : 'block';
-        document.getElementById('loginBtn').style.display = isLogin ? 'block' : 'none';
-        document.getElementById('registerBtn').style.display = isLogin ? 'none' : 'block';
-        document.getElementById('formTitle').innerText = isLogin ? 'Welcome Back' : 'Create Account';
-        document.getElementById('formSubtitle').innerText = isLogin ? 'Enter your credentials to access your account' : 'Fill in the details to register a new account';
-        
-        const msg = document.getElementById('message');
-        msg.innerText = '';
-        msg.className = '';
+      // Render public coffee menu
+      renderCoffeeGrid('coffeeGrid', false);
+
+      // Check if user is already signed in and adjust nav
+      const token = localStorage.getItem('token');
+      if (token) {
+        const navActions = document.getElementById('navActions');
+        if (navActions) {
+          navActions.innerHTML = `
+            <a href="dashboard.html" class="btn-primary">Member Dashboard →</a>
+          `;
+        }
       }
     </script>
-    <script src="app.js"></script>
   </body>
 </html>
